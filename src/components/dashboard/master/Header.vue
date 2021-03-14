@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+  <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-secondary">
     <div class="mr-auto">
       <router-link to="/">
         <img src="../../../assets/logo.png" />
@@ -16,7 +16,7 @@
         </form>
 
         <div class="navbar-nav">
-          <router-link to="/" class="ml-5 text-white">
+          <router-link to="/dashboard" class="ml-5 text-white">
             <b-icon icon="house-door-fill"></b-icon>
           </router-link>
 
@@ -35,7 +35,7 @@
         
       </div>
 
-      <router-link to="/login" class="ml-5 p-2 rounded text-white bg-danger">
+      <router-link to="/logout" class="ml-5 p-2 rounded text-white bg-danger">
         Logout <b-icon icon="arrow-bar-right"></b-icon>
       </router-link>
     </nav>

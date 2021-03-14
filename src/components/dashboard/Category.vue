@@ -48,33 +48,29 @@
 </template>
 
 <script>
-  // import Core from '../auth/Core';
+import server from '../../server';
 
-  // export default {
-  //   data() {
-  //     return {
-  //       category: {
-  //         name: ''
-  //       },
-  //       errors: {}
-  //     }
-  //   },
-  //   mounted() {
-  //     if(!Core.check())
-  //       this.$router.push({name: 'login'});
-  //   },
-  //   methods: {
-  //     upload: function() {
-  //       Core.post('category', this.category)
-  //       .then(() => {
-  //         this.$router.push({name: 'dashboard'});
-  //       })
-  //       .catch(error => {
-  //         this.errors = error.response.data;
-  //       });
-  //     },
-  //   }
-  // }
+  export default {
+    data() {
+      return {
+        category: {
+          name: ''
+        },
+        errors: {}
+      }
+    },
+    methods: {
+      upload: function() {
+        server.post('category', this.category)
+        .then(() => {
+          this.$router.push({name: 'dashboard'});
+        })
+        .catch(error => {
+          this.errors = error.response.data;
+        });
+      },
+    }
+  }
 </script>
 
 <style scoped>

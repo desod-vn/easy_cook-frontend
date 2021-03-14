@@ -24,4 +24,10 @@ export default {
     );
   },
 
+  delete(url){
+    return axios.delete(
+      apiUrl+url,
+      { headers: this.getHeaders() }
+    );
+  }
 }
