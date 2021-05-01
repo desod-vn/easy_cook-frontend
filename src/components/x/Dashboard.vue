@@ -3,7 +3,7 @@
     <Header :user="user"/>
     <div class="container-fluid">
       <div class="row">
-        <Sidebar :categories="categories" class="col-lg-3 col-md-6" />
+        <Sidebar :categories="categories" :articles="articles" class="col-lg-3 col-md-6" />
         <div class="col-lg-9 col-md-6">
           <router-view></router-view>
         </div>
@@ -20,12 +20,14 @@ export default {
   data() {
     return {
       user: '',
-      categories: ''
+      categories: '',
+      articles: '',
     }
   },
   mounted() {
     this.getUser();
     this.getCategory();
+    this.getArticle();
   },
   components: {
     Header,
@@ -45,6 +47,15 @@ export default {
       server.get('category')
         .then(response => {
           this.categories = response.data;
+        })
+        .catch(error => {
+          console.log(error)
+        });
+    },
+    getArticle: function() {
+      server.get('article')
+        .then(response => {
+          this.articles = response.data;
         })
         .catch(error => {
           console.log(error)

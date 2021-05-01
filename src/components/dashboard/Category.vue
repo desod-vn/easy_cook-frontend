@@ -1,78 +1,58 @@
 <template>
-  <div class="container d-flex flex-column">
-    <div class="row justify-content-center align-items-center min-vh-100">
+  <b-list-group>
+    <b-list-group-item class="flex-column align-items-start">
+      <div class="d-flex justify-content-between">
+        <h5 class="mb-1 font-weight-bold">
+          <b-icon icon="folder-fill"></b-icon>
+          Quản lý chuyên mục
+        </h5>
+        <b-badge variant="success" class="h5" pill>{{
+          categories.length
+        }}</b-badge>
+      </div>
 
-      <form 
-        class="col-lg-6 col-md-8 mx-auto" 
-        @submit.prevent="upload()"
-      >
-          <div v-if="errors.errors">
-            <div 
-              class="alert alert-danger"
-              v-for="error in errors.errors" 
-              :key="error.id"
-            >
-              {{ error[0] }}
-            </div>
-          </div>
-
-        <div 
-          class="alert alert-info" 
-          v-if="errors.message"
+      <b-list-group class="mt-3 mb-2">
+        <b-list-group-item
+          v-for="(category, index) in categories"
+          :key="index"
+          class="d-flex justify-content-between"
         >
-          {{ errors.message }}
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label">Category Name: </label>
-          <input 
-            type="text" 
-            name="name" 
-            class="form-control" 
-            v-model="category.name"
+          <router-link
+            :to="{ name: 'categoryDetail', params: { id: category.id } }"
+            :id="index"
           >
-        </div>
-
-        <div class="d-flex align-items-center">
-          <button 
-            type="submit"
-            class="btn btn-lg btn-outline-primary"
-          >
-            Create New
-          </button>
-        </div>
-      </form>
-             
-    </div>
-  </div>
+            {{ category.name }}
+          </router-link>
+          <span>
+            <span
+              @click.prevent="editCategory(category.id, category.name)"
+              class="mr-2"
+            >
+              <b-icon icon="pencil" variant="info"></b-icon>
+            </span>
+            <span @click.prevent="deleteCategory(category.id)" class="ml-2">
+              <b-icon icon="x-circle" variant="danger"></b-icon>
+            </span>
+          </span>
+        </b-list-group-item>
+      </b-list-group>
+    </b-list-group-item>
+  </b-list-group>
 </template>
-
 <script>
-import server from '../../server';
+// import backer from "../../utils/axios";
 
-  export default {
-    data() {
-      return {
-        category: {
-          name: ''
-        },
-        errors: {}
-      }
+export default {
+  props: ["categories"],
+  methods: {
+    deleteCategory: function (id) {
+      this.$parent.deleteCategory(id);
     },
-    methods: {
-      upload: function() {
-        server.post('category', this.category)
-        .then(() => {
-          this.$router.push({name: 'dashboard'});
-        })
-        .catch(error => {
-          this.errors = error.response.data;
-        });
-      },
-    }
-  }
+    editCategory: function (id, name) {
+      this.$parent.editCategory(id, name);
+    },
+  },
+};
 </script>
-
-<style scoped>
-  
+<style>
 </style>

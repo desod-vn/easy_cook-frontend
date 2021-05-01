@@ -2,20 +2,28 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
+// import Article from './components/dashboard/Article'
+// import newArticle from './components/dashboard/newArticle'
+// import newCategory from './components/dashboard/newCategory'
+// import editCategory from './components/dashboard/editCategory'
 
-import Article from './components/dashboard/Article'
-import Category from './components/dashboard/Category'
+import Dashboard from './pages/Dashboard'
+import Back from './pages/Back'
+import Logout from './pages/Logout'
+import Register from './pages/Register'
+import Login from './pages/Login'
+import Home from './pages/Home'
 
-import Dashboard from './components/dashboard/Dashboard'
-
-import Logout from './components/Logout'
-import Register from './components/Register'
-import Login from './components/Login'
 
 
 export default new VueRouter({
   mode: 'history',
   routes : [
+    { 
+      path: '/', 
+      component: Home, 
+      name: 'home' 
+    },
     { 
       path: '/login', 
       component: Login, 
@@ -31,23 +39,44 @@ export default new VueRouter({
       component: Logout, 
       name: 'logout' 
     },
-    {
+    { 
       path: '/dashboard', 
       component: Dashboard, 
-      name: 'dashboard',
-      children: [
-        { 
-          path: '/category', 
-          component: Category, 
-          name: 'category' 
-        },
-        { 
-          path: '/article', 
-          component: Article, 
-          name: 'article' 
-        }
-      ]
-    }
+      name: 'dashboard' 
+    },
+    { 
+      path: '/back', 
+      component: Back, 
+      name: 'backDashboard' 
+    },
+    // {
+    //   path: '/dashboard', 
+    //   component: Dashboard, 
+    //   name: 'dashboard',
+    //   children: [
+    //     { 
+    //       path: '/category', 
+    //       component: newCategory, 
+    //       name: 'newCategory' 
+    //     },
+    //     { 
+    //       path: '/category/edit/:id', 
+    //       component: editCategory, 
+    //       name: 'editCategory',
+    //       props: true
+    //     },
+    //     { 
+    //       path: '/article', 
+    //       component: newArticle, 
+    //       name: 'newArticle' 
+    //     },
+    //     { 
+    //       path: '/articles', 
+    //       component: Article, 
+    //       name: 'Article' 
+    //     }
+      // ]
+    // }
   ]
 });
     

@@ -1,5 +1,5 @@
 <template>
-  <div class="container d-flex flex-column">
+  <div class="d-flex flex-column">
     <div class="row justify-content-center align-items-center min-vh-100">
 
       <form 
@@ -96,57 +96,55 @@
 </template>
 
 <script>
-  // import Core from '../auth/Core';
-  // import vSelect from 'vue-select';
-  // import 'vue-select/dist/vue-select.css';
-  // export default {
-  //   data() {
-  //     return {
-  //       article: {
-  //         name: '',
-  //         content: '',
-  //         tags: '',
-  //         category_id: '',
-  //         photo: ''
-  //       },
-  //       categories: [],
-  //       errors: {}
-  //     }
-  //   },
-  //   components: {
-  //     vSelect
-  //   },
-  //   mounted() {
-  //     if(!Core.check())
-  //       this.$router.push({name: 'login'});
-  //     this.getCategories();
-  //   },
-  //   methods: {
-  //     upload: function() {
-  //       this.article.category_id = this.article.category_id.id;
-  //       Core.post('article', this.article)
-  //       .then(() => {
-  //         this.$router.push({name: 'dashboard'});
-  //       })
-  //       .catch(error => {
-  //         this.errors = error.response.data;
-  //         this.article.category_id = this.article.category_id.name;
-  //       });
+  import server from '../../server';
+  import vSelect from 'vue-select';
+  import 'vue-select/dist/vue-select.css';
+  export default {
+    data() {
+      return {
+        article: {
+          name: '',
+          content: '',
+          tags: '',
+          category_id: '',
+          photo: ''
+        },
+        categories: [],
+        errors: {}
+      }
+    },
+    components: {
+      vSelect
+    },
+    mounted() {
+      this.getCategories();
+    },
+    methods: {
+      upload: function() {
+        this.article.category_id = this.article.category_id.id;
+        server.post('article', this.article)
+        .then(() => {
+          this.$router.push({name: 'dashboard'});
+        })
+        .catch(error => {
+          this.errors = error.response.data;
+          this.article.category_id = this.article.category_id.name;
+        });
         
         
-  //       console.log(this.article);
-  //     },
-  //     getCategories: function() {
-  //       Core.get('category')
-  //       .then(response => {
-  //         this.categories = response.data;
-  //       })
-  //       .catch(error => {
-  //         console.log(error)
-  //       });
-  //     }
-  //   }
-  // }
+        console.log(this.article);
+      },
+      getCategories: function() {
+        server.get('category')
+        .then(response => {
+          this.categories = response.data;
+        })
+        .catch(error => {
+          console.log(error)
+        });
+      }
+    }
+  }
 </script>
 
 <style scoped>
