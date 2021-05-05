@@ -53,37 +53,45 @@
         </div>
       </div>
       <div class="row">
-        <Category :categories="categories" class="col-xl-8 col-sm-6" />
-        <Categori :ingredients="ingredients" class="col-xl-4 col-sm-6" />
+        <Category
+          :categories="categories"
+          :total="total"
+          :perPage="perPage"
+          class="col-xl-8 col-sm-6"
+        />
+        <Ingredient :ingredients="ingredients" class="col-xl-4 col-sm-6" />
       </div>
     </div>
+    <Footer />
   </section>
 </template>
 <script>
 import backer from "../utils/axios";
 import Header from "../components/Header";
-
 import Category from "../components/dashboard/Category";
-import Categori from "../components/dashboard/Create";
+import Ingredient from "../components/dashboard/Ingredient";
+import Footer from "../components/Footer";
+
 
 export default {
   data() {
     return {
-      admin: this.$store.state.user.role,
       one: {
         name: "",
       },
       which: "",
       errors: {},
       categories: {},
+      total: 0,
       ingredients: {},
-      category: {},
+      perPage: 0,
     };
   },
   components: {
     Header,
     Category,
-    Categori,
+    Ingredient,
+    Footer,
   },
   methods: {
     success: function (name, action, variant) {
@@ -99,7 +107,7 @@ export default {
       );
     },
     failure: function (error) {
-      this.$bvToast.toast(`${error.errors.name}`, {
+      this.$bvToast.toast(`${error.errors}`, {
         title: `${error.message}`,
         variant: "danger",
         solid: true,
@@ -130,6 +138,7 @@ export default {
             this.failure(error.response.data);
           });
       }
+      this.one.name = "";
     },
 
     deleteCategory: function (id) {
@@ -142,31 +151,41 @@ export default {
         });
     },
 
-    loadCategory: function () {
-      backer.get("category").then((response) => {
+    loadCategory: function (page = 1) {
+      backer.get(`category?page=${page}`).then((response) => {
         this.categories = response.data.data;
+        this.total = response.data.total;
+        this.perPage = response.data.per_page;
       });
     },
 
-    loadIngredient: function (name = '') {
-      backer.get(`ingredient?search=${ name }`).then((response) => {
+    loadIngredient: function (name = "") {
+      backer.get(`ingredient?search=${name}`).then((response) => {
         this.ingredients = response.data;
       });
     },
 
-
-    // removeIngredient: function (id) {
-    //   let choose = confirm("Bạn có thực sự muốn xóa nguyên liệu này không ?");
-    //   if (choose == true)
-    //     backer.delete("category/" + id).then((response) => {
-    //       if (response.data.status) {
-    //         this.success("Chuyên mục", "xóa", "warning");
-    //       }
-    //     });
-    // },
+    editIngredient: function (id, name) {
+      let ingredient = prompt("Vui lòng nhập tên nguyên liệu muốn sửa", name);
+      this.ingredient = {
+        name: ingredient,
+      };
+      if (ingredient != null) {
+        backer
+          .put("ingredient/" + id, this.ingredient)
+          .then((response) => {
+            if (response.data.status) {
+              this.success("Nguyên liệu", "cập nhật", "info");
+            }
+          })
+          .catch((error) => {
+            this.failure(error.response.data);
+          });
+      }
+    },
 
     editCategory: function (id, name) {
-      let category = prompt("Vui lòng nhập tên chuyên mục mới", name);
+      let category = prompt("Vui lòng nhập tên chuyên mục muốn sửa", name);
       this.category = {
         name: category,
       };
@@ -184,9 +203,7 @@ export default {
       }
     },
   },
-  updated() {
-    if (this.admin !== "admin") this.$router.push({ name: "home" });
-  },
+  updated() {},
   mounted() {
     this.loadCategory();
     this.loadIngredient();

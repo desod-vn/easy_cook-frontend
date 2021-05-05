@@ -18,7 +18,7 @@
           class="d-flex justify-content-between"
         >
           <router-link
-            :to="{ name: 'categoryDetail', params: { id: category.id } }"
+            :to="{ name: 'category', params: { id: category.id } }"
             :id="index"
           >
             {{ category.name }}
@@ -35,15 +35,32 @@
             </span>
           </span>
         </b-list-group-item>
+        <b-list-group-item class="d-flex bg-dark justify-content-center">
+          <pagination
+            v-model="page"
+            :records="total"
+            :per-page="perPage"
+            @paginate="loadCategory"
+            :options="{ texts: { count: '' } }"
+          />
+        </b-list-group-item>
       </b-list-group>
     </b-list-group-item>
   </b-list-group>
 </template>
 <script>
-// import backer from "../../utils/axios";
+import Pagination from "vue-pagination-2";
 
 export default {
-  props: ["categories"],
+  data() {
+    return {
+      page: 1,
+    };
+  },
+  props: ["categories", "total", "perPage"],
+  components: {
+    Pagination,
+  },
   methods: {
     deleteCategory: function (id) {
       this.$parent.deleteCategory(id);
@@ -51,8 +68,11 @@ export default {
     editCategory: function (id, name) {
       this.$parent.editCategory(id, name);
     },
+    loadCategory: function (page) {
+      this.$parent.loadCategory(page);
+    },
   },
 };
 </script>
-<style>
+<style scoped>
 </style>

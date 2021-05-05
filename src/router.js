@@ -8,7 +8,10 @@ Vue.use(VueRouter)
 // import editCategory from './components/dashboard/editCategory'
 
 import Dashboard from './pages/Dashboard'
-import Back from './pages/Back'
+import Post from './pages/Post'
+import View from './pages/View'
+import Category from './pages/Category'
+
 import Logout from './pages/Logout'
 import Register from './pages/Register'
 import Login from './pages/Login'
@@ -45,9 +48,19 @@ export default new VueRouter({
       name: 'dashboard' 
     },
     { 
-      path: '/back', 
-      component: Back, 
-      name: 'backDashboard' 
+      path: '/post/:id', 
+      component: Post, 
+      name: 'post' 
+    },
+    { 
+      path: '/view/:id-:slug', 
+      component: View, 
+      name: 'view' 
+    },
+    { 
+      path: '/category/:id', 
+      component: Category, 
+      name: 'category' 
     },
     // {
     //   path: '/dashboard', 
