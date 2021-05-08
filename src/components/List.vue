@@ -1,10 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-xl-12">
-        <h2 class="font-weight-bolder mt-5 mb-3">Công thức mới nhất</h2>
-      </div>
-      <div class="col-xl-6" v-for="(post, index) in posts" :key="index">
+      <div :class="`col-xl-${ col }`" v-for="(post, index) in posts" :key="index">
         <div class="item__wrap">
           <div class="img__wrap">
             <router-link
@@ -22,12 +19,25 @@
 
             <p class="p-2">
               <b-icon icon="calendar" class="mr-1" />Ngày đăng:
-              {{ moment(post.created_at).format("DD-MM-YYYY") }}
+              {{ moment(post.updated_at).format("DD-MM-YYYY") }}
               <br />
               <b-icon icon="clock" class="mr-1" />Giờ đăng:
-              {{ moment(post.created_at).format("h:mm a") }}
+              {{ moment(post.updated_at).format("h:mm a") }}
             </p>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12">
+        <div class="d-flex bg-dark p-2 justify-content-center">
+          <pagination
+            v-model="page"
+            :records="total"
+            :per-page="perPage"
+            @paginate="loadPost"
+            :options="{ texts: { count: '' } }"
+          />
         </div>
       </div>
     </div>
@@ -36,14 +46,24 @@
 
 <script>
 import moment from "moment";
+import Pagination from "vue-pagination-2";
 
 export default {
   data() {
     return {
+      page: 1,
       moment: moment,
     };
   },
-  props: ["posts"],
+  components: {
+    Pagination,
+  },
+  methods: {
+    loadPost: function (page) {
+      this.$parent.loadPost(page);
+    },
+  },
+  props: ["posts", "total", "perPage", 'col'],
 };
 </script>
 

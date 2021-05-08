@@ -18,6 +18,16 @@
                 />
               </div>
 
+              <div class="form-group" v-if="unitShow">
+                <label class="form-control-label">Đơn vị tính: </label>
+                <input
+                  type="text"
+                  name="name"
+                  class="form-control"
+                  v-model="one.unit"
+                />
+              </div>
+
               <div class="form-check">
                 <input
                   class="form-check-input"
@@ -26,6 +36,7 @@
                   id="which1"
                   value="category"
                   v-model="which"
+                  @click="unitShow = false"
                 />
                 <label class="form-check-label" for="which1">
                   Chuyên mục
@@ -39,6 +50,7 @@
                   id="which2"
                   value="ingredient"
                   v-model="which"
+                  @click="unitShow = true"
                 />
                 <label class="form-check-label" for="which2">
                   Nguyên liệu
@@ -68,21 +80,22 @@
 <script>
 import backer from "../utils/axios";
 import Header from "../components/Header";
-import Category from "../components/dashboard/Category";
-import Ingredient from "../components/dashboard/Ingredient";
+import Category from "../components/Category";
+import Ingredient from "../components/Ingredient";
 import Footer from "../components/Footer";
-
 
 export default {
   data() {
     return {
       one: {
         name: "",
+        unit: "",
       },
       which: "",
       errors: {},
       categories: {},
       total: 0,
+      unitShow: false,
       ingredients: {},
       perPage: 0,
     };
@@ -107,8 +120,12 @@ export default {
       );
     },
     failure: function (error) {
-      this.$bvToast.toast(`${error.errors}`, {
-        title: `${error.message}`,
+      let err;
+      if (error.errors.name) err = error.errors.name;
+      else if (error.errors.unit) err = error.errors.unit;
+
+      this.$bvToast.toast(`${err}`, {
+        title: `Có lỗi vui lòng thử lại`,
         variant: "danger",
         solid: true,
       });
@@ -138,7 +155,7 @@ export default {
             this.failure(error.response.data);
           });
       }
-      this.one.name = "";
+      this.one = {};
     },
 
     deleteCategory: function (id) {
@@ -165,10 +182,12 @@ export default {
       });
     },
 
-    editIngredient: function (id, name) {
+    editIngredient: function (id, name, unit) {
       let ingredient = prompt("Vui lòng nhập tên nguyên liệu muốn sửa", name);
+      let unitIngredient = prompt("Vui lòng nhập tên nguyên liệu muốn sửa", unit);
       this.ingredient = {
         name: ingredient,
+        unit: unitIngredient,
       };
       if (ingredient != null) {
         backer

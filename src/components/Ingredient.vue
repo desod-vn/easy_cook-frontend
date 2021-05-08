@@ -21,7 +21,7 @@
         :key="index"
         class="btn btn-outline-dark rounded-pill m-1"
       >
-        <span @click.prevent="editIngredient(ingredient.id, ingredient.name)">
+        <span @click.prevent="editIngredient(ingredient.id, ingredient.name, ingredient.unit)">
           {{ ingredient.name }}
           <b-icon icon="file-earmark-font" variant="info"></b-icon>
         </span>
@@ -41,8 +41,8 @@ export default {
     searchIngredient: function (name) {
       this.$parent.loadIngredient(name);
     },
-    editIngredient: function (id, name) {
-      this.$parent.editIngredient(id, name);
+    editIngredient: function (id, name, unit) {
+      this.$parent.editIngredient(id, name, unit);
     },
   },
 };

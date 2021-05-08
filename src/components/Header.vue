@@ -24,14 +24,13 @@
 
           <b-navbar-nav class="ml-auto">
             <div v-if="admin == 'admin'">
-              <span
-                @click.prevent="createNew()"
+              <router-link
                 class="btn btn-info rounded-pill m-2"
-                to="/new"
+                to="/create"
               >
                 <b-icon icon="arrow-up-right-square" />
                 Công thức
-              </span>
+              </router-link>
               <router-link
                 class="btn btn-info rounded-pill m-2"
                 to="/dashboard"
@@ -122,38 +121,8 @@ export default {
     };
   },
   methods: {
-    loadPost: function (name, page) {
-      this.$parent.loadPost(name, page);
-    },
-    createNew: function () {
-      let post = {
-        name: "Tên công thức",
-        content: "Nội dung công thức",
-        category_id: 1 || null,
-      };
-
-      backer
-        .post("post", post)
-        .then((response) => {
-          if (response.data.status) {
-            this.latestPost = response.data.post.id;
-            this.$router.push({
-              name: "post",
-              params: { id: this.latestPost },
-            });
-          }
-        })
-        .catch((error) => {
-          this.failure(error.response.data);
-        });
-    },
-
-    failure: function (error) {
-      this.$bvToast.toast(`${error.errors.name}`, {
-        title: `${error.message}`,
-        variant: "danger",
-        solid: true,
-      });
+    loadPost: function () {
+        this.$router.push({ name: "search", params: { search: this.namePost }});
     },
 
     avatarNew: function () {
@@ -196,7 +165,7 @@ export default {
       return this.$store.state.user.role;
     },
   },
-  mounted() {
+  async mounted() {
     if (localStorage.getItem("token")) {
       backer.get("info").then((response) => {
         if (response.data.status) this.$store.state.user = response.data.user;

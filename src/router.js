@@ -2,13 +2,11 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
-// import Article from './components/dashboard/Article'
-// import newArticle from './components/dashboard/newArticle'
-// import newCategory from './components/dashboard/newCategory'
-// import editCategory from './components/dashboard/editCategory'
 
 import Dashboard from './pages/Dashboard'
+import Create from './pages/Create'
 import Post from './pages/Post'
+import Love from './pages/Love'
 import View from './pages/View'
 import Category from './pages/Category'
 
@@ -16,6 +14,8 @@ import Logout from './pages/Logout'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import Home from './pages/Home'
+import Search from './pages/Search'
+
 
 
 
@@ -48,6 +48,11 @@ export default new VueRouter({
       name: 'dashboard' 
     },
     { 
+      path: '/create/', 
+      component: Create, 
+      name: 'Create' 
+    },
+    { 
       path: '/post/:id', 
       component: Post, 
       name: 'post' 
@@ -62,34 +67,17 @@ export default new VueRouter({
       component: Category, 
       name: 'category' 
     },
-    // {
-    //   path: '/dashboard', 
-    //   component: Dashboard, 
-    //   name: 'dashboard',
-    //   children: [
-    //     { 
-    //       path: '/category', 
-    //       component: newCategory, 
-    //       name: 'newCategory' 
-    //     },
-    //     { 
-    //       path: '/category/edit/:id', 
-    //       component: editCategory, 
-    //       name: 'editCategory',
-    //       props: true
-    //     },
-    //     { 
-    //       path: '/article', 
-    //       component: newArticle, 
-    //       name: 'newArticle' 
-    //     },
-    //     { 
-    //       path: '/articles', 
-    //       component: Article, 
-    //       name: 'Article' 
-    //     }
-      // ]
-    // }
+    { 
+      path: '/love', 
+      component: Love, 
+      name: 'love' 
+    },
+    { 
+      path: '/search/:search', 
+      component: Search, 
+      name: 'search' 
+    },
   ]
 });
-    
+
+

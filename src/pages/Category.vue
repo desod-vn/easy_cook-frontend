@@ -7,7 +7,12 @@
       </h3>
       <div v-for="(post, index) in posts" :key="index">
         <div class="border p-2 mb-1">
-          <router-link to="">{{ post.name }} </router-link>
+          <router-link
+            :to="{ name: 'view', params: { id: post.id, slug: post.slug } }"
+            >{{ post.name }}
+          </router-link>
+          <hr />
+          {{ post.content.substr(3, 100) }}...
         </div>
       </div>
       <div class="d-flex bg-dark justify-content-center">
@@ -45,7 +50,6 @@ export default {
         this.category = response.data.category;
         this.posts = response.data.posts;
         this.total = response.data.posts.length;
-        console.log(response.data)
       });
     },
   },

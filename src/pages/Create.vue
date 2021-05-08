@@ -26,6 +26,84 @@
             <br />
 
             <div class="form-group">
+              <label class="form-control-label">Các nguyên liệu: </label>
+              <div
+                class="form-row m-1"
+                v-for="(ingredient, index) in checkedIngredients"
+                :key="'A' + index"
+              >
+                <div class="col-4">
+                  {{ ingredient.name }}
+                </div>
+                <div class="col-2">
+                  <input
+                    type="text"
+                    v-model="ingredient.unit"
+                    class="form-control"
+                    placeholder="Đơn vị tính"
+                    readonly
+                  />
+                </div>
+                <div class="col-2">
+                  <input
+                    type="number"
+                    v-model="quantity[index]"
+                    class="form-control"
+                    placeholder="Số lượng"
+                  />
+                </div>
+                <div class="col-4 p-2">
+                  <input
+                    type="radio"
+                    :id="'yes' + index"
+                    value="1"
+                    v-model="main[index]"
+                    class="mr-2"
+                  />
+                  <label :for="'yes' + index">Nguyên liệu chính</label>
+                  <input
+                    type="radio"
+                    :id="'no' + index"
+                    value="0"
+                    v-model="main[index]"
+                  />
+                  <label :for="'no' + index">Không</label>
+                </div>
+              </div>
+              <div class="input-group mt-3 mb-2">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><b-icon icon="search" /></span>
+                </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="ingredient"
+                  @change="loadIngredient(ingredient)"
+                />
+              </div>
+              <span
+                v-for="(ingredient, index) in ingredients"
+                :key="index"
+                class="border p-1 m-1"
+              >
+                <input
+                  :id="ingredient.id"
+                  :value="{
+                    id: ingredient.id,
+                    name: ingredient.name,
+                    unit: ingredient.unit,
+                  }"
+                  name="product"
+                  type="checkbox"
+                  v-model="checkedIngredients"
+                />
+                <label :for="ingredient.id"
+                  ><span>{{ ingredient.name }}</span></label
+                >
+              </span>
+            </div>
+
+            <div class="form-group">
               <label class="form-control-label">Nội dung: </label>
               <ckeditor
                 :editor="editor"
@@ -60,7 +138,7 @@
             </div>
             <div class="d-flex align-items-center">
               <button type="submit" class="btn btn-outline-primary">
-                Cập nhật công thức
+                Tạo công thức
               </button>
             </div>
           </form>
@@ -89,7 +167,12 @@ export default {
         category_id: "",
         image: "",
       },
-
+      ingredient: "",
+      ingredients: [],
+      checkedIngredients: [],
+      quantity: [],
+      unit: [],
+      main: [],
       categories: [],
       errors: {},
       editor: ClassicEditor,
@@ -104,7 +187,7 @@ export default {
   methods: {
     failure: function () {
       this.$bvToast.toast(
-        `Xuất hiện lỗi, vui lòng kiểm tra và tiến hành cập nhật lại.`,
+        `Xuất hiện lỗi, vui lòng kiểm tra và tiến hành tạo lại.`,
         {
           title: `Có lỗi`,
           variant: "danger",
@@ -126,7 +209,7 @@ export default {
       this.post.image = e.target.files[0];
     },
     handle: function () {
-      let id = this.$route.params.id;
+      let numberIngredients = this.checkedIngredients.length;
       let data = new FormData();
       data.append("image", this.post.image);
       data.append("name", this.post.name);
@@ -140,10 +223,21 @@ export default {
       };
 
       backer
-        .post("post/" + id, data, config)
+        .post("post", data, config)
         .then((response) => {
           if (response.data.status) {
-            this.$router.push({ name: "home"  });
+            let id = response.data.post.id;
+            for (let i = 0; i < numberIngredients; i++) {
+              let ingredientOne = {
+                ingredient: this.checkedIngredients[i].id,
+                name: this.checkedIngredients[i].name,
+                quantity: this.quantity[i] || 1,
+                unit: this.checkedIngredients[i].unit,
+                main: this.main[i] || false,
+              };
+              backer.post("ingredient_post/" + id, ingredientOne);
+            }
+            this.$router.push({ name: "home" });
           }
         })
         .catch((error) => {

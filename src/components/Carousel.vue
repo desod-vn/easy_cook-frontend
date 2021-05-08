@@ -1,33 +1,27 @@
 <template>
   <div>
     <b-carousel
-      id="carousel-1"
       :interval="5000"
       controls
       indicators
       background="#ababab"
-      img-width="1024"
-      img-height="480"
+      max-img-width="1024"
+      max-img-height="480"
       class="mt-5"
     >
-      <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54">
-        <h1 class="bg-text">Hello world!</h1>
-      </b-carousel-slide>
-
-      <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54">
-        <h1>Hello world!</h1>
-      </b-carousel-slide>
-
-      <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54">
-        <h1>Hello world!</h1>
-      </b-carousel-slide>
-
-      <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54">
-        <h1>Hello world!</h1>
-      </b-carousel-slide>
-
-      <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54">
-        <h1>Hello world!</h1>
+      <b-carousel-slide
+        v-for="(post, index) in posts.slice(0, 5)"
+        :key="index"
+        :img-src="post.image"
+        class="img-fluid"
+      >
+        <h1 class="bg-text">
+          <router-link class="text-light"
+            :to="{ name: 'view', params: { id: post.id, slug: post.slug } }"
+          >
+            {{ post.name }}
+          </router-link>
+        </h1>
       </b-carousel-slide>
     </b-carousel>
   </div>
@@ -40,13 +34,14 @@ export default {
       slide: 1,
     };
   },
+  props: ["posts"],
   methods: {},
 };
 </script>
 
 <style scoped>
 .bg-text {
-    background: rgba(0, 0, 0, 0.7);
-    padding: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 10px;
 }
 </style>
