@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <div :class="`col-xl-${ col }`" v-for="(post, index) in posts" :key="index">
+      <div :class="`col-xl-${col}`" v-for="(post, index) in posts" :key="index">
         <div class="item__wrap">
           <div class="img__wrap">
             <router-link
@@ -17,13 +17,24 @@
               {{ post.name }}
             </router-link>
 
-            <p class="p-2">
-              <b-icon icon="calendar" class="mr-1" />Ngày đăng:
-              {{ moment(post.updated_at).format("DD-MM-YYYY") }}
-              <br />
-              <b-icon icon="clock" class="mr-1" />Giờ đăng:
-              {{ moment(post.updated_at).format("h:mm a") }}
-            </p>
+            <div class="d-flex p-2 justify-content-between align-items-center">
+              <div>
+                <b-icon icon="calendar" class="mr-1" />Ngày đăng:
+                {{ moment(post.updated_at).format("DD-MM-YYYY") }}
+                <br />
+                <b-icon icon="clock" class="mr-1" />Giờ đăng:
+                {{ moment(post.updated_at).format("h:mm a") }}
+              </div>
+              <span v-if="show">
+                <b-icon
+                  :icon="post.store ? 'bookmark-check-fill' : 'bookmark'"
+                  class="h3"
+                  @click="store(post.id, index)"
+                  v-b-tooltip.hover
+                  :title="post.store ? 'Hủy lưu công thức' : 'Lưu công thức'"
+                />
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -47,23 +58,59 @@
 <script>
 import moment from "moment";
 import Pagination from "vue-pagination-2";
+import backer from "../utils/axios";
 
 export default {
   data() {
     return {
       page: 1,
       moment: moment,
+      storePost: "",
+      show: false,
     };
+  },
+  computed: {
+    user() {
+      return this.$store.state.user.id;
+    },
   },
   components: {
     Pagination,
   },
   methods: {
+    store: function (post, id) {
+      this.show = false;
+      backer.post("post_user/" + this.user, { post: post }).then((response) => {
+        if (response.data.status) {
+          this.posts[id].store = !this.posts[id].store;
+          this.storePostLoad();
+        }
+      });
+    },
     loadPost: function (page) {
       this.$parent.loadPost(page);
     },
+    storePostLoad: function () {
+      backer.get("info").then((response) => {
+        backer.get("post_user/" + response.data.user.id).then((response) => {
+          this.storePost = response.data.post;
+          for (let i = 0; i < this.posts.length; i++) {
+            for (let j = 0; j < this.storePost.length; j++) {
+              if (this.posts[i].id == this.storePost[j].post_id) {
+                this.posts[i].store = 1;
+              }
+            }
+          }
+          this.show = true;
+        });
+      });
+    },
   },
-  props: ["posts", "total", "perPage", 'col'],
+
+  props: ["posts", "total", "perPage", "col"],
+  mounted() {
+    this.storePostLoad();
+  },
 };
 </script>
 

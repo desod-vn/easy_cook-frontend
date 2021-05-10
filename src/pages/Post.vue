@@ -15,6 +15,11 @@
               />
             </div>
 
+            <div v-if="image">
+              Hình ảnh mẫu:
+              <br />
+              <img :src="image" class="img-responsive" />
+            </div>
             <label class="form-control-label">Hình ảnh: </label>
             <input
               type="file"
@@ -89,7 +94,7 @@ export default {
         category_id: "",
         image: "",
       },
-
+      image: "",
       categories: [],
       errors: {},
       editor: ClassicEditor,
@@ -112,6 +117,7 @@ export default {
         }
       );
     },
+
     loadCategory: function (page = 1) {
       backer.get(`category?page=${page}&per_page=1000`).then((response) => {
         this.categories = response.data.data;
@@ -124,11 +130,20 @@ export default {
     },
     onFile: function (e) {
       this.post.image = e.target.files[0];
+      this.createImage(this.post.image);
+    },
+    createImage: function (file) {
+      let reader = new FileReader();
+      let vm = this;
+      reader.onload = (e) => {
+        vm.image = e.target.result;
+      };
+      reader.readAsDataURL(file);
     },
     handle: function () {
       let id = this.$route.params.id;
       let data = new FormData();
-      data.append("image", this.post.image);
+      if (this.post.image) data.append("image", this.post.image);
       data.append("name", this.post.name);
       data.append("content", this.post.content);
       data.append("category_id", this.post.category_id.id);
@@ -143,7 +158,7 @@ export default {
         .post("post/" + id, data, config)
         .then((response) => {
           if (response.data.status) {
-            this.$router.push({ name: "home"  });
+            this.$router.push({ name: "home" });
           }
         })
         .catch((error) => {
@@ -155,7 +170,14 @@ export default {
       let id = this.$route.params.id;
       backer.get(`post/${id}`).then((response) => {
         if (response.data.status) {
-          this.post = response.data.post;
+          this.post.name = response.data.post.name;
+          this.post.content = response.data.post.content;
+          this.post.category_id = response.data.post.category_id;
+          for (let i = 0; i < this.categories.length; i++) {
+            if (this.categories[i].id == this.post.category_id) {
+              this.post.category_id = this.categories[i];
+            }
+          }
         }
       });
     },

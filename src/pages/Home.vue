@@ -12,7 +12,13 @@
           <div class="col-xl-12">
             <h2 class="font-weight-bolder mt-5 mb-3">Công thức mới nhất</h2>
           </div>
-          <List :posts="posts" :total="total" :perPage="perPage" :col="col" />
+          <List
+            :posts="posts"
+            :storePost="storePost"
+            :total="total"
+            :perPage="perPage"
+            :col="col"
+          />
         </div>
         <div class="col-xl-4">
           <div class="row" v-if="userx">
@@ -109,11 +115,10 @@ export default {
       userx: false,
       col: 6,
       loveList: [],
-      user: "",
+      storePost: "",
       returnedTarget: {},
     };
   },
-
   methods: {
     more: function () {
       this.i += 5;
@@ -128,7 +133,7 @@ export default {
     loadLove: function () {
       backer.get("info").then((response) => {
         backer
-          .get(`ingredient_user/${response.data.user.id}`)
+          .get("ingredient_user/" + response.data.user.id)
           .then((response) => {
             if (response.data.status) {
               let arr = [];
@@ -143,7 +148,7 @@ export default {
                       for (let x = 0; x < arr.length; x++) {
                         for (let z = x + 1; z < arr.length; z++) {
                           if (arr[x].post_id == arr[z].post_id) {
-                            arr = arr.splice(z, 1);
+                            arr.splice(x, 1);
                             break;
                           }
                         }

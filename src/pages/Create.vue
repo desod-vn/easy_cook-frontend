@@ -4,144 +4,151 @@
     <div class="container">
       <div class="row">
         <div class="col-xl-12 border border-info p-5 mt-5 mb-5">
-          <form enctype="multipart/form-data" @submit.prevent="handle()">
-            <div class="form-group">
-              <label class="form-control-label">Tên công thức: </label>
-              <input
-                type="text"
-                name="name"
-                class="form-control"
-                v-model="post.name"
-              />
-            </div>
-
-            <label class="form-control-label">Hình ảnh: </label>
+          <div class="form-group">
+            <label class="form-control-label">Tên công thức: </label>
             <input
-              type="file"
-              name="image"
-              class="form-control-file"
-              @change="onFile"
+              type="text"
+              name="name"
+              class="form-control"
+              v-model="post.name"
             />
+          </div>
 
+          <div v-if="image">
+            Hình ảnh mẫu:
             <br />
+            <img :src="image" class="img-responsive" />
+          </div>
+          <label class="form-control-label">Hình ảnh: </label>
+          <input
+            type="file"
+            name="image"
+            class="form-control-file"
+            @change="onFile"
+          />
 
-            <div class="form-group">
-              <label class="form-control-label">Các nguyên liệu: </label>
-              <div
-                class="form-row m-1"
-                v-for="(ingredient, index) in checkedIngredients"
-                :key="'A' + index"
-              >
-                <div class="col-4">
-                  {{ ingredient.name }}
-                </div>
-                <div class="col-2">
-                  <input
-                    type="text"
-                    v-model="ingredient.unit"
-                    class="form-control"
-                    placeholder="Đơn vị tính"
-                    readonly
-                  />
-                </div>
-                <div class="col-2">
-                  <input
-                    type="number"
-                    v-model="quantity[index]"
-                    class="form-control"
-                    placeholder="Số lượng"
-                  />
-                </div>
-                <div class="col-4 p-2">
-                  <input
-                    type="radio"
-                    :id="'yes' + index"
-                    value="1"
-                    v-model="main[index]"
-                    class="mr-2"
-                  />
-                  <label :for="'yes' + index">Nguyên liệu chính</label>
-                  <input
-                    type="radio"
-                    :id="'no' + index"
-                    value="0"
-                    v-model="main[index]"
-                  />
-                  <label :for="'no' + index">Không</label>
-                </div>
+          <br />
+
+          <div class="form-group">
+            <label class="form-control-label">Các nguyên liệu: </label>
+            <div
+              class="form-row m-1"
+              v-for="(ingredient, index) in checkedIngredients"
+              :key="'A' + index"
+            >
+              <div class="col-4">
+                {{ ingredient.name }}
               </div>
-              <div class="input-group mt-3 mb-2">
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><b-icon icon="search" /></span>
-                </div>
+              <div class="col-2">
                 <input
                   type="text"
+                  v-model="ingredient.unit"
                   class="form-control"
-                  v-model="ingredient"
-                  @change="loadIngredient(ingredient)"
+                  placeholder="Đơn vị tính"
+                  readonly
                 />
               </div>
-              <span
-                v-for="(ingredient, index) in ingredients"
-                :key="index"
-                class="border p-1 m-1"
-              >
+              <div class="col-2">
                 <input
-                  :id="ingredient.id"
-                  :value="{
-                    id: ingredient.id,
-                    name: ingredient.name,
-                    unit: ingredient.unit,
-                  }"
-                  name="product"
-                  type="checkbox"
-                  v-model="checkedIngredients"
+                  type="number"
+                  v-model="quantity[index]"
+                  class="form-control"
+                  placeholder="Số lượng"
                 />
-                <label :for="ingredient.id"
-                  ><span>{{ ingredient.name }}</span></label
-                >
-              </span>
-            </div>
-
-            <div class="form-group">
-              <label class="form-control-label">Nội dung: </label>
-              <ckeditor
-                :editor="editor"
-                class="form-control"
-                name="content"
-                height="500px"
-                v-model="post.content"
-              ></ckeditor>
-            </div>
-
-            <div class="form-group">
-              <label class="form-control-label">Chuyên mục: </label>
-              <v-select
-                v-model="post.category_id"
-                :options="categories"
-                label="name"
-              >
-              </v-select>
-            </div>
-            <div v-if="errors.errors">
-              <div
-                class="alert alert-danger"
-                v-for="error in errors.errors"
-                :key="error.id"
-              >
-                {{ error[0] }}
+              </div>
+              <div class="col-4 p-2">
+                <input
+                  type="radio"
+                  :id="'yes' + index"
+                  value="1"
+                  v-model="main[index]"
+                  class="mr-2"
+                />
+                <label :for="'yes' + index">Nguyên liệu chính</label>
+                <input
+                  type="radio"
+                  :id="'no' + index"
+                  value="0"
+                  v-model="main[index]"
+                />
+                <label :for="'no' + index">Không</label>
               </div>
             </div>
+            <div class="input-group mt-3 mb-2">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><b-icon icon="search" /></span>
+              </div>
+              <input
+                type="text"
+                class="form-control"
+                v-model="ingredient"
+                @change="loadIngredient(ingredient)"
+              />
+            </div>
+            <span
+              v-for="(ingredient, index) in ingredients.slice(0, 12)"
+              :key="index"
+              class="border p-1 m-1"
+            >
+              <input
+                :id="ingredient.id"
+                :value="{
+                  id: ingredient.id,
+                  name: ingredient.name,
+                  unit: ingredient.unit,
+                }"
+                name="product"
+                type="checkbox"
+                v-model="checkedIngredients"
+              />
+              <label :for="ingredient.id"
+                ><span>{{ ingredient.name }}</span></label
+              > </span
+            >......
+          </div>
 
-            <div class="alert alert-info" v-if="errors.message">
-              {{ errors.message }}
+          <div class="form-group">
+            <label class="form-control-label">Nội dung: </label>
+            <ckeditor
+              :editor="editor"
+              class="form-control"
+              name="content"
+              height="500px"
+              v-model="post.content"
+            ></ckeditor>
+          </div>
+
+          <div class="form-group">
+            <label class="form-control-label">Chuyên mục: </label>
+            <v-select
+              v-model="post.category_id"
+              :options="categories"
+              label="name"
+            >
+            </v-select>
+          </div>
+          <div v-if="errors.errors">
+            <div
+              class="alert alert-danger"
+              v-for="error in errors.errors"
+              :key="error.id"
+            >
+              {{ error[0] }}
             </div>
-            <div class="d-flex align-items-center">
-              <button type="submit" class="btn btn-outline-primary">
-                Tạo công thức
-              </button>
-            </div>
-          </form>
+          </div>
+
+          <div class="alert alert-info" v-if="errors.message">
+            {{ errors.message }}
+          </div>
+          <div class="d-flex align-items-center">
+            <button
+              type="submit"
+              @click="handle()"
+              class="btn btn-outline-primary"
+            >
+              Tạo công thức
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -172,6 +179,7 @@ export default {
       checkedIngredients: [],
       quantity: [],
       unit: [],
+      image: "",
       main: [],
       categories: [],
       errors: {},
@@ -207,6 +215,15 @@ export default {
     },
     onFile: function (e) {
       this.post.image = e.target.files[0];
+      this.createImage(this.post.image);
+    },
+    createImage: function (file) {
+      let reader = new FileReader();
+      let vm = this;
+      reader.onload = (e) => {
+        vm.image = e.target.result;
+      };
+      reader.readAsDataURL(file);
     },
     handle: function () {
       let numberIngredients = this.checkedIngredients.length;
@@ -245,19 +262,10 @@ export default {
           this.failure();
         });
     },
-    loadPost: function () {
-      let id = this.$route.params.id;
-      backer.get(`post/${id}`).then((response) => {
-        if (response.data.status) {
-          this.post = response.data.post;
-        }
-      });
-    },
   },
   mounted() {
     this.loadCategory();
     this.loadIngredient();
-    this.loadPost();
   },
 };
 </script>

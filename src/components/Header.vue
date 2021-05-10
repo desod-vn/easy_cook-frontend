@@ -60,7 +60,7 @@
                 </b-dropdown-item>
                 <b-dropdown-item>
                   <b-icon icon="heart-fill" />
-                  <router-link to="/love"> Nguyên liệu </router-link>
+                  <router-link to="/love"> Yêu thích </router-link>
                 </b-dropdown-item>
                 <b-dropdown-item>
                   <b-icon icon="box-arrow-in-right" />
