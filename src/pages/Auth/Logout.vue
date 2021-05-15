@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import backer from "../utils/axios";
+import backer from "../../utils/axios";
 
 export default {
   mounted() {

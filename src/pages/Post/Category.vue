@@ -42,10 +42,10 @@
   </div>
 </template>
 <script>
-import backer from "../utils/axios";
+import backer from "../../utils/axios";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 import Pagination from "vue-pagination-2";
 

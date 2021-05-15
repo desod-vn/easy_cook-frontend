@@ -62,9 +62,9 @@
 </template>
 
 <script>
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import backer from "../utils/axios";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import backer from "../../utils/axios";
 
 export default {
   data() {

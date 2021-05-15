@@ -51,6 +51,7 @@
               <div class="col-2">
                 <input
                   type="number"
+                  step="0.1"
                   v-model="quantity[index]"
                   class="form-control"
                   placeholder="Số lượng"
@@ -156,11 +157,11 @@
   </div>
 </template>
 <script>
-import backer from "../utils/axios";
-import Header from "../components/Header";
+import backer from "../../utils/axios";
+import Header from "../../components/Header";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
-import Footer from "../components/Footer";
+import Footer from "../../components/Footer";
 
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -247,9 +248,7 @@ export default {
             for (let i = 0; i < numberIngredients; i++) {
               let ingredientOne = {
                 ingredient: this.checkedIngredients[i].id,
-                name: this.checkedIngredients[i].name,
                 quantity: this.quantity[i] || 1,
-                unit: this.checkedIngredients[i].unit,
                 main: this.main[i] || false,
               };
               backer.post("ingredient_post/" + id, ingredientOne);

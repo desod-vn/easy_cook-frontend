@@ -76,11 +76,11 @@
   </div>
 </template>
 <script>
-import backer from "../utils/axios";
-import Header from "../components/Header";
+import backer from "../../utils/axios";
+import Header from "../../components/Header";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
-import Footer from "../components/Footer";
+import Footer from "../../components/Footer";
 
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";

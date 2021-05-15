@@ -133,10 +133,10 @@
   </div>
 </template>
 <script>
-import backer from "../utils/axios";
+import backer from "../../utils/axios";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 import moment from "moment";
 
@@ -224,7 +224,7 @@ export default {
     deletePost: function (id) {
       let choose = confirm("Bạn có thực sự muốn xóa công thức này không ?");
       if (choose == true)
-        backer.delete("comment/" + id).then((response) => {
+        backer.delete("post/" + id).then((response) => {
           if (response.data.status) {
             this.$router.push({ name: "home" });
           }

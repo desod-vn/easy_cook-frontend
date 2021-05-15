@@ -131,13 +131,14 @@ export default {
       });
     },
     loadLove: function () {
+      let arr = [];
       backer.get("info").then((response) => {
         backer
           .get("ingredient_user/" + response.data.user.id)
           .then((response) => {
             if (response.data.status) {
-              let arr = [];
-              for (const index in response.data.high) {
+              let liked = response.data.listLiked;
+              for (let index in response.data.high) {
                 backer
                   .get(`love?id=${response.data.high[index]}`)
                   .then((response) => {
@@ -146,9 +147,14 @@ export default {
                       this.loveList = arr;
 
                       for (let x = 0; x < arr.length; x++) {
-                        for (let z = x + 1; z < arr.length; z++) {
-                          if (arr[x].post_id == arr[z].post_id) {
+                        for (let z = 0; z < liked.length; z++) {
+                          if (arr[x].post_id == liked[z].post_id) {
                             arr.splice(x, 1);
+                          }
+                        }
+                        for (let y = x + 1; y < arr.length; y++) {
+                          if (arr[x].post_id == arr[y].post_id) {
+                            arr.splice(y, 1);
                             break;
                           }
                         }
@@ -158,6 +164,7 @@ export default {
                     }
                   });
               }
+              console.log(arr);
             }
           });
       });

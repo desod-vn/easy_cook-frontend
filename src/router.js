@@ -3,16 +3,19 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 
-import Dashboard from './pages/Dashboard'
-import Create from './pages/Create'
-import Post from './pages/Post'
-import Love from './pages/Love'
-import View from './pages/View'
-import Category from './pages/Category'
+import Dashboard from './pages/User/Dashboard'
+import Love from './pages/User/Love'
 
-import Logout from './pages/Logout'
-import Register from './pages/Register'
-import Login from './pages/Login'
+
+import Create from './pages/Post/Create'
+import Post from './pages/Post/Post'
+import View from './pages/Post/View'
+import Category from './pages/Post/Category'
+
+import Logout from './pages/Auth/Logout'
+import Register from './pages/Auth/Register'
+import Login from './pages/Auth/Login'
+
 import Home from './pages/Home'
 import Search from './pages/Search'
 

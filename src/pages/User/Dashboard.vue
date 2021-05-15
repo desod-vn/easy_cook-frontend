@@ -78,11 +78,11 @@
   </section>
 </template>
 <script>
-import backer from "../utils/axios";
-import Header from "../components/Header";
-import Category from "../components/Category";
-import Ingredient from "../components/Ingredient";
-import Footer from "../components/Footer";
+import backer from "../../utils/axios";
+import Header from "../../components/Header";
+import Category from "../../components/Category";
+import Ingredient from "../../components/Ingredient";
+import Footer from "../../components/Footer";
 
 export default {
   data() {
